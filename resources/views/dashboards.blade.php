@@ -1,174 +1,149 @@
-
-
+@extends('layouts.app')
+@section('content')
 <div class="container-fluid">
-    <div class="email-wrap bookmark-wrap">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-xl-3 box-col-3">
-                <div class="md-sidebar">
-                    <a class="btn btn-primary md-sidebar-toggle" href="javascript:void(0)">task filter</a>
+            <div class="email-wrap bookmark-wrap">
+              <div class="row">
+                <div class="col-xl-3 box-col-3">
+                  <div class="md-sidebar"><a class="btn btn-primary md-sidebar-toggle" href="javascript:void(0)">task filter</a>
                     <div class="md-sidebar-aside job-left-aside custom-scrollbar">
-                        <div class="email-left-aside">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="email-app-sidebar left-bookmark task-sidebar">
-                                        <div class="d-flex">
-                                            <div class="media-size-email">
-                                                <img class="me-3 rounded-circle" src="https://admin.pixelstrap.net/crocs/assets/images/user/user.png" alt="">
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <h3>{{ Auth::user()->name }}</h3>
-                                                <p>{{ Auth::user()->email }}</p>
-                                            </div>
-                                        </div>
-                                        <ul class="nav main-menu" role="tablist">
-                                            <li class="nav-item">
-                                                <button class="badge-light-primary btn-block txt-primary btn-mail w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <i class="me-2" data-feather="check-circle"></i> New Task
-                                                </button>
-                                            </li>
-                                            <li class="nav-item"><span class="main-title">Views</span></li>
-                                            <li><a class="active" id="pills-created-tab" data-bs-toggle="pill" href="#pills-created" role="tab" aria-controls="pills-created" aria-selected="true">
-                                                <span class="title">Created by me</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-todaytask-tab" data-bs-toggle="pill" href="#pills-todaytask" role="tab" aria-controls="pills-todaytask" aria-selected="false">
-                                                <span class="title">Today's Tasks</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-delayed-tab" data-bs-toggle="pill" href="#pills-delayed" role="tab" aria-controls="pills-delayed" aria-selected="false">
-                                                <span class="title">Delayed Tasks</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-upcoming-tab" data-bs-toggle="pill" href="#pills-upcoming" role="tab" aria-controls="pills-upcoming" aria-selected="false">
-                                                <span class="title">Upcoming Tasks</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-weekly-tab" data-bs-toggle="pill" href="#pills-weekly" role="tab" aria-controls="pills-weekly" aria-selected="false">
-                                                <span class="title">This week tasks</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-monthly-tab" data-bs-toggle="pill" href="#pills-monthly" role="tab" aria-controls="pills-monthly" aria-selected="false">
-                                                <span class="title">This month tasks</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-assigned-tab" data-bs-toggle="pill" href="#pills-assigned" role="tab" aria-controls="pills-assigned" aria-selected="false">
-                                                <span class="title">Assigned to me</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-tasks-tab" data-bs-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false">
-                                                <span class="title">My tasks</span>
-                                            </a></li>
-                                            <li><hr></li>
-                                            <li><span class="main-title">Tags
-                                                <span class="pull-right">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#createtag"><i data-feather="plus-circle"></i></a>
-                                                </span>
-                                            </span></li>
-                                            <li><a class="show" id="pills-notification-tab" data-bs-toggle="pill" href="#pills-notification" role="tab" aria-controls="pills-notification" aria-selected="false">
-                                                <span class="title">Notification</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-newsletter-tab" data-bs-toggle="pill" href="#pills-newsletter" role="tab" aria-controls="pills-newsletter" aria-selected="false">
-                                                <span class="title">Newsletter</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-business-tab" data-bs-toggle="pill" href="#" role="tab" aria-selected="false">
-                                                <span class="title">Business</span>
-                                            </a></li>
-                                            <li><a class="show" id="pills-holidays-tab" data-bs-toggle="pill" href="#" role="tab" aria-selected="false">
-                                                <span class="title">Holidays</span>
-                                            </a></li>
-                                        </ul>
-                                    </div>
+                      <div class="email-left-aside">
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="email-app-sidebar left-bookmark task-sidebar">
+                              <div class="d-flex">
+                                <div class="media-size-email"><img class="me-3 rounded-circle" src="https://admin.pixelstrap.net/crocs/assets/images/user/user.png" alt=""></div>
+                                <div class="flex-grow-1">
+                                  <h3>{{ Auth::user()->name }}</h3>
+                                  <p>{{ Auth::user()->email }}</p>
                                 </div>
+                              </div>
+                              <ul class="nav main-menu" role="tablist">
+                                <li class="nav-item">
+                                  <button class="badge-light-primary btn-block txt-primary btn-mail w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="me-2" data-feather="check-circle"></i> New Task</button>
+                                </li>
+                                <li class="nav-item"><span class="main-title"> Views</span></li>
+                                <li><a class="active" id="pills-created-tab" data-bs-toggle="pill" href="#pills-created" role="tab" aria-controls="pills-created" aria-selected="true"><span class="title"> Created by me</span></a></li>
+                                <li><a class="show" id="pills-todaytask-tab" data-bs-toggle="pill" href="#pills-todaytask" role="tab" aria-controls="pills-todaytask" aria-selected="false"><span class="title"> Today's Tasks</span></a></li>
+                                <li><a class="show" id="pills-delayed-tab" data-bs-toggle="pill" href="#pills-delayed" role="tab" aria-controls="pills-delayed" aria-selected="false"><span class="title"> Delayed Tasks</span></a></li>
+                                <li><a class="show" id="pills-upcoming-tab" data-bs-toggle="pill" href="#pills-upcoming" role="tab" aria-controls="pills-upcoming" aria-selected="false"><span class="title">Upcoming Tasks</span></a></li>
+                                <li><a class="show" id="pills-weekly-tab" data-bs-toggle="pill" href="#pills-weekly" role="tab" aria-controls="pills-weekly" aria-selected="false"><span class="title">This week tasks</span></a></li>
+                                <li><a class="show" id="pills-monthly-tab" data-bs-toggle="pill" href="#pills-monthly" role="tab" aria-controls="pills-monthly" aria-selected="false"><span class="title">This month tasks</span></a></li>
+                                <li><a class="show" id="pills-assigned-tab" data-bs-toggle="pill" href="#pills-assigned" role="tab" aria-controls="pills-assigned" aria-selected="false"><span class="title">Assigned to me</span></a></li>
+                                <li><a class="show" id="pills-tasks-tab" data-bs-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false"><span class="title">My tasks</span></a></li>
+                                <li>
+                                  <hr>
+                                </li>
+                                <li><span class="main-title"> Tags<span class="pull-right"><a href="#" data-bs-toggle="modal" data-bs-target="#createtag"><i data-feather="plus-circle"></i></a></span></span></li>
+                                <li><a class="show" id="pills-notification-tab" data-bs-toggle="pill" href="#pills-notification" role="tab" aria-controls="pills-notification" aria-selected="false"><span class="title"> notification</span></a></li>
+                                <li><a class="show" id="pills-newsletter-tab" data-bs-toggle="pill" href="#pills-newsletter" role="tab" aria-controls="pills-newsletter" aria-selected="false"><span class="title"> Newsletter</span></a></li>
+                                <li><a class="show" id="pills-business-tab" data-bs-toggle="pill" href="#" role="tab" aria-selected="false"><span class="title"> Business</span></a></li>
+                                <li><a class="show" id="pills-holidays-tab" data-bs-toggle="pill" href="#" role="tab" aria-selected="false"><span class="title"> Holidays</span></a></li>
+                              </ul>
                             </div>
+                          </div>
                         </div>
+                      </div>
                     </div>
+                  </div>
+                </div>
+
+                <div class="col-xl-9 col-md-12 box-col-80">
+                  <div class="email-right-aside bookmark-tabcontent">
+                    <div class="card email-body radius-left">
+                      <div class="ps-0">
+                        <div class="tab-content">
+                          <div class="tab-pane fade active show" id="pills-created" role="tabpanel" aria-labelledby="pills-created-tab">
+                            <div class="card mb-0">
+                             
+                              <div class="card-body p-0">
+                                <div class="taskadd">
+                                  <div class="table-responsive custom-scrollbar">
+                                  @if($tasks->isEmpty())
+        <p>No tasks available.</p>
+    @else
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($tasks as $task)
+                    <tr>
+                        <td>{{ $task->title }}</td>
+                        <td>{{ $task->description }}</td>
+                        <td>{{ $task->status }}</td>
+                        <td>
+                        <td>
+    <!-- Edit Button -->
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editTaskModal-{{ $task->id }}" title="Edit">
+        <i class="fa fa-edit"></i>
+    </button>
+
+    <!-- Edit Task Modal -->
+    <div class="modal fade" id="editTaskModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel-{{ $task->id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskModalLabel-{{ $task->id }}">Edit Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description" required>{{ $task->description }}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="start_date">Start Date</label>
+                            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $task->start_date }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="end_date">End Date</label>
+                            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $task->end_date }}" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </form>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Main Content -->
-            <div class="col-xl-9 col-md-12 box-col-80">
-                <div class="email-right-aside bookmark-tabcontent">
-                    <div class="card email-body radius-left">
-                        <div class="ps-0">
-                            <div class="tab-content">
-                                <!-- Created by me -->
-                                <div class="tab-pane fade active show" id="pills-created" role="tabpanel" aria-labelledby="pills-created-tab">
-                                    <div class="card mb-0">
-                                        <div class="card-body p-0">
-                                            <div class="taskadd">
-                                                <div class="table-responsive custom-scrollbar">
-                                                    @if($tasks->isEmpty())
-                                                        <p>No tasks available.</p>
-                                                    @else
-                                                        <table class="table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Title</th>
-                                                                    <th>Description</th>
-                                                                    <th>Status</th>
-                                                                    <th>Actions</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @forelse($tasks as $task)
-                                                                    <tr>
-                                                                        <td>{{ $task->title }}</td>
-                                                                        <td>{{ $task->description }}</td>
-                                                                        <td>{{ $task->status }}</td>
-                                                                        <td>
-                                                                            <!-- Edit Button -->
-                                                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editTaskModal-{{ $task->id }}" title="Edit">
-                                                                                <i class="fa fa-edit"></i>
-                                                                            </button>
-
-                                                                            <!-- Edit Task Modal -->
-                                                                            <div class="modal fade" id="editTaskModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel-{{ $task->id }}" aria-hidden="true">
-                                                                                <div class="modal-dialog" role="document">
-                                                                                    <div class="modal-content">
-                                                                                        <div class="modal-header">
-                                                                                            <h5 class="modal-title" id="editTaskModalLabel-{{ $task->id }}">Edit Task</h5>
-                                                                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                            </button>
-                                                                                        </div>
-                                                                                        <div class="modal-body">
-                                                                                            <form action="{{ route('tasks.update', $task->id) }}" method="POST">
-                                                                                                @csrf
-                                                                                                @method('PUT')
-
-                                                                                                <div class="form-group">
-                                                                                                    <label for="title">Title</label>
-                                                                                                    <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" required>
-                                                                                                </div>
-
-                                                                                                <div class="form-group">
-                                                                                                    <label for="description">Description</label>
-                                                                                                    <textarea class="form-control" id="description" name="description" required>{{ $task->description }}</textarea>
-                                                                                                </div>
-
-                                                                                                <div class="form-group">
-                                                                                                    <label for="start_date">Start Date</label>
-                                                                                                    <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $task->start_date }}" required>
-                                                                                                </div>
-
-                                                                                                <div class="form-group">
-                                                                                                    <label for="end_date">End Date</label>
-                                                                                                    <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $task->end_date }}" required>
-                                                                                                </div>
-
-                                                                                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                                                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                                                            </form>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <!-- Delete Button -->
-                                                                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
-                                                                                @csrf
-                                                                                @method('DELETE')
-
-                                                                               <button type="submit" class="btn btn-danger btn-sm" title="Delete">
-                                                                                <i class="fa fa-trash"></i>
-
-                                                                               </button>
-                                                                             </form>
-                                                                         </td>
+    <!-- Delete Button -->
+    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+            <i class="fa fa-trash"></i>
+        </button>
+    </form>
+</td>
+</tr>
+            @empty
+                <tr>
+                    <td colspan="4">No tasks available.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+@endif
 
          
                                   </div>
@@ -477,13 +452,13 @@
           <input id="index_var" type="hidden" value="6">
           <button class="btn btn-secondary" id="Bookmark" type="submit">Save</button>
           <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
-
-          <!-- javascript -->
-         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
         </form>
       </div>
     </div>
   </div>
+</div>
+<!-- javascript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
-
+   </div> @endsection
