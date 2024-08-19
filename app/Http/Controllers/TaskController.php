@@ -7,6 +7,7 @@ use App\Models\User_tasks;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -16,9 +17,12 @@ class TaskController extends Controller
     public function index()
 {
     $users = User::all();
-    $tasks = Task::all(); 
+    // $tasks = Task::all();
+    
 
-    return view('dashboard', compact('users', 'tasks'));   
+    // $tasks = Auth::user()->tasks()->get();
+
+    return view('dashboard', compact('users'));   
 }
 
 
@@ -40,6 +44,7 @@ class TaskController extends Controller
                 \DB::table('user_tasks')->insert([
                     'task_id' => $task->id,
                     'user_id' => $user_id,
+                    'completed' => false,  // Set completed field to false by default
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -51,14 +56,14 @@ class TaskController extends Controller
     }
     
 
-    public function getUserTasks($userId)
+    public function getUserTasks()
 {
-    $tasks = Task::whereHas('users', function($query) use ($userId) {
-        $query->where('user_id', $userId);
-    })->get();
-
-    return view('tasks.user_tasks', ['tasks' => $tasks]); 
-
+    $user_id = auth()->id();
+    $tasks = DB::table('tasks')
+    ->join('users', 'tasks.user_id', 'users.id')
+    ->select('tasks.id','tasks.title','tasks.description','tasks.start_date','tasks.end_date','tasks.status','users.name as user_name')
+    ->where('tasks.user_id', $user_id)
+    ->get(); 
 }
 
  // Update the specified task in storage
@@ -66,17 +71,31 @@ class TaskController extends Controller
  {
      $task = Task::findOrFail($id);
 
-     // Update the task with the new data
-     $task->update([
+    // Determine if the task is completed 
+    $isCompleted = $request->has('completed');
+
+    $task->update([
         'title' => $request->input('title'),
         'description' => $request->input('description'),
         'start_date' => $request->input('start_date'),
         'end_date' => $request->input('end_date'),
-        // 'status' => $request->input('status'),
+        'status' => $isCompleted ? 'closed' : 'open', // Update status based on completion
     ]);
 
+    // Update the completed status in the pivot table for the assigned users
+    if ($request->has('user_ids')) {
+        foreach ($request->input('user_ids') as $user_id) {
+            \DB::table('user_tasks')
+                ->where('task_id', $task->id)
+                ->where('user_id', $user_id)
+                ->update([
+                    'completed' => $isCompleted,  // Update the completion status in the pivot table
+                    'updated_at' => now(),
+                ]);
+        }
+    }
 
-     return redirect()->route('dashboard')->with('success', 'Task updated successfully!');
+    return redirect()->route('dashboard')->with('success', 'Task updated successfully!');
  }
 
 public function edit($id)
@@ -91,6 +110,7 @@ public function destroy($id)
     $task->delete();
     return redirect()->route('dashboard')->with('success', 'Task deleted successfully!');
 }
+
 
 
 }

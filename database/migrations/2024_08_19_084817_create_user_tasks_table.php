@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('user_tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('task_id');
-            $table->string('user_id');
+            $table->unsignedBigInteger('task_id');
+            $table->unsignedBigInteger('user_id');
+            $table->boolean('completed')->default(false);
             $table->timestamps();
+
+            // Add foreign key constraints if needed
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -27,3 +32,4 @@ return new class extends Migration
         Schema::dropIfExists('user_tasks');
     }
 };
+

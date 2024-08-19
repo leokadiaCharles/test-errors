@@ -5,19 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User_tasks extends Model
+class user_tasks extends Model
 {
     use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Define the fillable fields to allow mass assignment
     protected $fillable = [
         'task_id',
         'user_id',
-        
+        'completed',
+
     ];
-    protected $table = 'user_tasks';
+
 }

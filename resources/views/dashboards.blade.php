@@ -23,21 +23,12 @@
                                 </li>
                                 <li class="nav-item"><span class="main-title"> Views</span></li>
                                 <li><a class="active" id="pills-created-tab" data-bs-toggle="pill" href="#pills-created" role="tab" aria-controls="pills-created" aria-selected="true"><span class="title"> Created by me</span></a></li>
-                                <li><a class="show" id="pills-todaytask-tab" data-bs-toggle="pill" href="#pills-todaytask" role="tab" aria-controls="pills-todaytask" aria-selected="false"><span class="title"> Today's Tasks</span></a></li>
-                                <li><a class="show" id="pills-delayed-tab" data-bs-toggle="pill" href="#pills-delayed" role="tab" aria-controls="pills-delayed" aria-selected="false"><span class="title"> Delayed Tasks</span></a></li>
-                                <li><a class="show" id="pills-upcoming-tab" data-bs-toggle="pill" href="#pills-upcoming" role="tab" aria-controls="pills-upcoming" aria-selected="false"><span class="title">Upcoming Tasks</span></a></li>
-                                <li><a class="show" id="pills-weekly-tab" data-bs-toggle="pill" href="#pills-weekly" role="tab" aria-controls="pills-weekly" aria-selected="false"><span class="title">This week tasks</span></a></li>
-                                <li><a class="show" id="pills-monthly-tab" data-bs-toggle="pill" href="#pills-monthly" role="tab" aria-controls="pills-monthly" aria-selected="false"><span class="title">This month tasks</span></a></li>
+                                
                                 <li><a class="show" id="pills-assigned-tab" data-bs-toggle="pill" href="#pills-assigned" role="tab" aria-controls="pills-assigned" aria-selected="false"><span class="title">Assigned to me</span></a></li>
-                                <li><a class="show" id="pills-tasks-tab" data-bs-toggle="pill" href="#pills-tasks" role="tab" aria-controls="pills-tasks" aria-selected="false"><span class="title">My tasks</span></a></li>
-                                <li>
+                                
                                   <hr>
                                 </li>
-                                <li><span class="main-title"> Tags<span class="pull-right"><a href="#" data-bs-toggle="modal" data-bs-target="#createtag"><i data-feather="plus-circle"></i></a></span></span></li>
-                                <li><a class="show" id="pills-notification-tab" data-bs-toggle="pill" href="#pills-notification" role="tab" aria-controls="pills-notification" aria-selected="false"><span class="title"> notification</span></a></li>
-                                <li><a class="show" id="pills-newsletter-tab" data-bs-toggle="pill" href="#pills-newsletter" role="tab" aria-controls="pills-newsletter" aria-selected="false"><span class="title"> Newsletter</span></a></li>
-                                <li><a class="show" id="pills-business-tab" data-bs-toggle="pill" href="#" role="tab" aria-selected="false"><span class="title"> Business</span></a></li>
-                                <li><a class="show" id="pills-holidays-tab" data-bs-toggle="pill" href="#" role="tab" aria-selected="false"><span class="title"> Holidays</span></a></li>
+                               
                               </ul>
                             </div>
                           </div>
@@ -78,6 +69,9 @@
                         <td>{{ $task->status }}</td>
                         <td>
                         <td>
+                        <ul>
+
+        
     <!-- Edit Button -->
     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editTaskModal-{{ $task->id }}" title="Edit">
         <i class="fa fa-edit"></i>
@@ -127,10 +121,10 @@
     </div>
 
     <!-- Delete Button -->
-    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
+    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;  ">
         @csrf
         @method('DELETE')
-        <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+        <button type="submit" class="btn btn-danger btn-sm" title="Delete"  >
             <i class="fa fa-trash"></i>
         </button>
     </form>
