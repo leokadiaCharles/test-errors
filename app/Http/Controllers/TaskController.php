@@ -82,6 +82,8 @@ class TaskController extends Controller
         'status' => $isCompleted ? 'closed' : 'open', // Update status based on completion
     ]);
 
+    
+
     // Update the completed status in the pivot table for the assigned users
     if ($request->has('user_ids')) {
         foreach ($request->input('user_ids') as $user_id) {
@@ -98,11 +100,17 @@ class TaskController extends Controller
     return redirect()->route('dashboard')->with('success', 'Task updated successfully!');
  }
 
-public function edit($id)
-{
-    $task = Task::findOrFail($id);
-    return view('tasks.edit', compact('task'));
-}
+
+ 
+
+ public function edit($id)
+ {
+     $task = Task::with('users')->findOrFail($id);
+     $users = User::all(); // Get all users to display in the dropdown
+ 
+     return view('tasks.edit', compact('task', 'users'));
+ }
+ 
 
 public function destroy($id)
 {
@@ -112,5 +120,25 @@ public function destroy($id)
 }
 
 
+public function updateStatus(Request $request, Task $task)
+    {
+        // Validate the incoming request data
+        // $request->validate([
+        //     'status' => 'required|in:open,closed',
+        // ]);
 
+        // Update the status of the task
+        $task->status = $request->input('status');
+        // dd($task);
+        $task->save();
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Task status updated successfully.');
+    }
+
+    // Other methods...
 }
+
+
+
+

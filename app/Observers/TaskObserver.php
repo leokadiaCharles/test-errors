@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Task;
+use App\Models\User;
+use App\Models\Telephone;
 
 class TaskObserver
 {
@@ -12,6 +14,9 @@ class TaskObserver
     public function created(Task $task): void
     {
         //
+
+        // Fetch all users assigned to the task
+        $assignedUsers = DB::table('user_tasks')->where('task_id', $task->id)->pluck('user_id');
     }
 
     /**

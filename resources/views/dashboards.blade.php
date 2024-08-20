@@ -57,6 +57,8 @@
                 <tr>
                     <th>Title</th>
                     <th>Description</th>
+                    <th>start_date</th>
+                    <th>end_date</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -66,70 +68,81 @@
                     <tr>
                         <td>{{ $task->title }}</td>
                         <td>{{ $task->description }}</td>
-                        <td>{{ $task->status }}</td>
+                        <td>{{ $task->start_date}}</td>
+                        <td>{{ $task->end_date}}</td>
                         <td>
+                                <form action="{{ route('tasks.updateStatus', $task->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="status" onchange="this.form.submit()">
+                                        <option value="open" {{ $task->status == 'open' ? 'selected' : '' }}>Open</option>
+                                        <option value="closed" {{ $task->status == 'closed' ? 'selected' : '' }}>Closed</option>
+                                    </select>
+                                </form>
+                         </td>
+
+                      
                         <td>
+
                         <ul>
+                       <!-- Edit Button -->
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editTaskModal-{{ $task->id }}" title="Edit">
+                                    <i class="fa fa-edit"></i>
+                                </button>
 
-        
-    <!-- Edit Button -->
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editTaskModal-{{ $task->id }}" title="Edit">
-        <i class="fa fa-edit"></i>
-    </button>
+                                  <!-- Edit Task Modal -->
+                                  <div class="modal fade" id="editTaskModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel-{{ $task->id }}" aria-hidden="true">
+                                      <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h5 class="modal-title" id="editTaskModalLabel-{{ $task->id }}">Edit Task</h5>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                  <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+                                                      @csrf
+                                                      @method('PUT')
 
-    <!-- Edit Task Modal -->
-    <div class="modal fade" id="editTaskModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel-{{ $task->id }}" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editTaskModalLabel-{{ $task->id }}">Edit Task</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('tasks.update', $task->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
+                                                      <div class="form-group">
+                                                          <label for="title">Title</label>
+                                                          <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" required>
+                                                      </div>
 
-                        <div class="form-group">
-                            <label for="title">Title</label>
-                            <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" required>
-                        </div>
+                                                      <div class="form-group">
+                                                          <label for="description">Description</label>
+                                                          <textarea class="form-control" id="description" name="description" required>{{ $task->description }}</textarea>
+                                                      </div>
 
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea class="form-control" id="description" name="description" required>{{ $task->description }}</textarea>
-                        </div>
+                                                      <div class="form-group">
+                                                          <label for="start_date">Start Date</label>
+                                                          <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $task->start_date }}" required>
+                                                      </div>
 
-                        <div class="form-group">
-                            <label for="start_date">Start Date</label>
-                            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $task->start_date }}" required>
-                        </div>
+                                                      <div class="form-group">
+                                                          <label for="end_date">End Date</label>
+                                                          <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $task->end_date }}" required>
+                                                      </div>
 
-                        <div class="form-group">
-                            <label for="end_date">End Date</label>
-                            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $task->end_date }}" required>
-                        </div>
+                                                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                  </form>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
 
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Button -->
-    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;  ">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-danger btn-sm" title="Delete"  >
-            <i class="fa fa-trash"></i>
-        </button>
-    </form>
-</td>
-</tr>
+                              <!-- Delete Button -->
+                              <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;  ">
+                                  @csrf
+                                  @method('DELETE')
+                                  <button type="submit" class="btn btn-danger btn-sm" title="Delete"  >
+                                      <i class="fa fa-trash"></i>
+                                  </button>
+                              </form>
+                          </td>
+                      </tr>
             @empty
                 <tr>
                     <td colspan="4">No tasks available.</td>
@@ -201,146 +214,117 @@
                           <div class="fade tab-pane" id="pills-assigned" role="tabpanel" aria-labelledby="pills-assigned-tab">
                             <div class="card mb-0">
                               <div class="card-header d-flex">
-                                <h4 class="mb-0">Assigned to me</h4><a href="#"><i class="me-2" data-feather="printer"></i>Print</a>
+                                <h4 class="mb-0">Assigned to me</h4><a href="#"><i class="me-2"></i></a>
                               </div>
                               <div class="card-body p-0">
                                 <div class="taskadd">
                                   <div class="table-responsive custom-scrollbar">
-                                    <table class="table">
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Client meeting</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">Documentation that is used to explain regarding some attributes of an object.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Plan webinar</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">kanban board is one of the tools that can be used to implement kanban to manage.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Email newsletter</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">There is some Console error in user profile page.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Publish podcast</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">Clone the theme test data file from the GitHub repository.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Lunch website</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">Documentation that is used to explain regarding some attributes of an object to the client.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                    </table>
+                                  @if($works->isEmpty())
+        <p>No tasks available.</p>
+    @else
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+
+                    <th>start_date</th>
+                    <th>end_date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($works as $task)
+                    <tr>
+                        <td>{{ $task->title }}</td>
+                        <td>{{ $task->description }}</td>
+                        <td>{{ $task->start_date}}</td>
+                        <td>{{ $task->end_date}}</td>
+                        <td>
+                                <form action="{{ route('tasks.updateStatus', $task->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="status" onchange="this.form.submit()">
+                                        <option value="open" {{ $task->status == 'open' ? 'selected' : '' }}>Open</option>
+                                        <option value="closed" {{ $task->status == 'closed' ? 'selected' : '' }}>Closed</option>
+                                    </select>
+                                </form>
+                         </td>
+
+                      
+                        <td>
+
+                        <ul>
+                       <!-- Edit Button -->
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editTaskModal-{{ $task->id }}" title="Edit">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+
+                                  <!-- Edit Task Modal -->
+                                  <div class="modal fade" id="editTaskModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel-{{ $task->id }}" aria-hidden="true">
+                                      <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h5 class="modal-title" id="editTaskModalLabel-{{ $task->id }}">Edit Task</h5>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                  <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+                                                      @csrf
+                                                      @method('PUT')
+
+                                                      <div class="form-group">
+                                                          <label for="title">Title</label>
+                                                          <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" required>
+                                                      </div>
+
+                                                      <div class="form-group">
+                                                          <label for="description">Description</label>
+                                                          <textarea class="form-control" id="description" name="description" required>{{ $task->description }}</textarea>
+                                                      </div>
+
+                                                      <div class="form-group">
+                                                          <label for="start_date">Start Date</label>
+                                                          <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $task->start_date }}" required>
+                                                      </div>
+
+                                                      <div class="form-group">
+                                                          <label for="end_date">End Date</label>
+                                                          <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $task->end_date }}" required>
+                                                      </div>
+
+                                                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                  </form>
+                                              </div>
+                                          </div>
+                                      </div>
                                   </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="fade tab-pane" id="pills-tasks" role="tabpanel" aria-labelledby="pills-tasks-tab">
-                            <div class="card mb-0">
-                              <div class="card-header d-flex">
-                                <h4 class="mb-0">My tasks</h4><a href="#"><i class="me-2" data-feather="printer"></i>Print</a>
-                              </div>
-                              <div class="card-body p-0">
-                                <div class="taskadd">
-                                  <div class="table-responsive custom-scrollbar">
-                                    <table class="table">
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Client meeting</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">Documentation that is used to explain regarding some attributes of an object.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Plan webinar</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">kanban board is one of the tools that can be used to implement kanban to manage.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Email newsletter</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">There is some Console error in user profile page.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Publish podcast</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">Clone the theme test data file from the GitHub repository.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                          <h3 class="task_title_0">Lunch website</h3>
-                                          <p class="project_name_0">General</p>
-                                        </td>
-                                        <td>
-                                          <p class="task_desc_0">Documentation that is used to explain regarding some attributes of an object to the client.</p>
-                                        </td>
-                                        <td><a class="me-2" href="#"><i data-feather="link"></i></a><a href="#"><i data-feather="more-horizontal"></i></a></td>
-                                        <td><a href="#"><i data-feather="trash-2"></i></a></td>
-                                      </tr>
-                                    </table>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+
+                              <!-- Delete Button -->
+                              <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;  ">
+                                  @csrf
+                                  @method('DELETE')
+                                  <button type="submit" class="btn btn-danger btn-sm" title="Delete"  >
+                                      <i class="fa fa-trash"></i>
+                                  </button>
+                              </form>
+                          </td>
+                      </tr>
+            @empty
+                <tr>
+                    <td colspan="4">No tasks available.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+@endif
                           <div class="fade tab-pane" id="pills-notification" role="tabpanel" aria-labelledby="pills-notification-tab">
                             <div class="card mb-0">
-                              <div class="card-header d-flex">
+                              <!-- <div class="card-header d-flex">
                                 <h4 class="mb-0">Notification</h4><a href="#"><i class="me-2" data-feather="printer"></i>Print</a>
                               </div>
                               <div class="card-body">
@@ -352,7 +336,7 @@
                             <div class="card mb-0">
                               <div class="card-header d-flex">
                                 <h4 class="mb-0">Newsletter</h4><a href="#"><i class="me-2" data-feather="printer"></i>Print</a>
-                              </div>
+                              </div> -->
                               <div class="card-body">
                                 <div class="details-bookmark text-center"><span>No tasks found.</span></div>
                               </div>
@@ -426,7 +410,7 @@
             </div>
 
             <div class="mb-3 mt-0 col-md-6">
-                        <select class="form-select" name="user_id">
+                        <select class="form-select" name="user_ids[]" multiple>
 
                           @foreach($user as $item)
                             <option value="{{$item->id}}">{{$item->name}}</option>
