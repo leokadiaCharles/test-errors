@@ -29,6 +29,6 @@
     <!-- Plugins JS Ends-->
     <!-- Theme js-->
     <script src="https://admin.pixelstrap.net/crocs/assets/js/script.js"></script>
-    <script src="https://admin.pixelstrap.net/crocs/assets/js/theme-customizer/customizer.js"></script>
+    <!-- <script src="https://admin.pixelstrap.net/crocs/assets/js/theme-customizer/customizer.js"></script> -->
     <!-- Plugin used-->
     <script>new WOW().init();</script>

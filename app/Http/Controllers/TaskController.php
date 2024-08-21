@@ -63,6 +63,8 @@ class TaskController extends Controller
     ->join('users', 'tasks.user_id', 'users.id')
     ->select('tasks.id','tasks.title','tasks.description','tasks.start_date','tasks.end_date','tasks.status','users.name as user_name')
     ->where('tasks.user_id', $user_id)
+    ->orderByRaw("CASE WHEN tasks.status = 'closed' THEN 1 ELSE 0 END") 
+    ->orderBy('tasks.end_date', 'asc') 
     ->get(); 
 }
 
@@ -122,14 +124,11 @@ public function destroy($id)
 
 public function updateStatus(Request $request, Task $task)
     {
-        // Validate the incoming request data
-        // $request->validate([
-        //     'status' => 'required|in:open,closed',
-        // ]);
+       
 
         // Update the status of the task
         $task->status = $request->input('status');
-        // dd($task);
+
         $task->save();
 
         // Redirect back with a success message

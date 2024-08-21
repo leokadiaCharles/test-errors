@@ -49,108 +49,140 @@
                               <div class="card-body p-0">
                                 <div class="taskadd">
                                   <div class="table-responsive custom-scrollbar">
-                                  @if($tasks->isEmpty())
-        <p>No tasks available.</p>
-    @else
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>start_date</th>
-                    <th>end_date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                                  <form id="filterForm">
+                                  <form id="filterForm">
+    <select id="statusFilter">
+        <option value="all">All</option>
+        <option value="open">Open</option>
+        <option value="closed">Closed</option>
+    </select>
+</form>
+
+@if($tasks->isEmpty())
+    <p>No tasks available.</p>
+@else
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="tasksTable">
+            @forelse($tasks as $task)
+                <tr data-status="{{ $task->status }}">
+                    <td>{{ $task->title }}</td>
+                    <td>{{ $task->description }}</td>
+                    <td>{{ $task->start_date }}</td>
+                    <td>{{ $task->end_date }}</td>
+                    <td>
+                        <form action="{{ route('tasks.updateStatus', $task->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('PATCH')
+                            <select name="status" onchange="this.form.submit()">
+                                <option value="open" {{ $task->status == 'open' ? 'selected' : '' }}>Open</option>
+                                <option value="closed" {{ $task->status == 'closed' ? 'selected' : '' }}>Closed</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        <!-- Edit Button -->
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editTaskModal-{{ $task->id }}" title="Edit">
+                            <i class="fa fa-edit"></i>
+                        </button>
+
+                        <!-- Edit Task Modal -->
+                        <div class="modal fade" id="editTaskModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel-{{ $task->id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editTaskModalLabel-{{ $task->id }}">Edit Task</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+
+                                            <div class="form-group">
+                                                <label for="title">Title</label>
+                                                <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="description">Description</label>
+                                                <textarea class="form-control" id="description" name="description" required>{{ $task->description }}</textarea>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="start_date">Start Date</label>
+                                                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $task->start_date }}" required min="{{ \Illuminate\Support\Carbon::today()->toDateString() }}" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="end_date">End Date</label>
+                                                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $task->end_date }}" required min="{{ \Illuminate\Support\Carbon::today()->toDateString() }}" />
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delete Button -->
+                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline" onsubmit="return confirm('Are you sure you want to delete')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @forelse($tasks as $task)
-                    <tr>
-                        <td>{{ $task->title }}</td>
-                        <td>{{ $task->description }}</td>
-                        <td>{{ $task->start_date}}</td>
-                        <td>{{ $task->end_date}}</td>
-                        <td>
-                                <form action="{{ route('tasks.updateStatus', $task->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('PATCH')
-                                    <select name="status" onchange="this.form.submit()">
-                                        <option value="open" {{ $task->status == 'open' ? 'selected' : '' }}>Open</option>
-                                        <option value="closed" {{ $task->status == 'closed' ? 'selected' : '' }}>Closed</option>
-                                    </select>
-                                </form>
-                         </td>
-
-                      
-                        <td>
-
-                        <ul>
-                       <!-- Edit Button -->
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editTaskModal-{{ $task->id }}" title="Edit">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-
-                                  <!-- Edit Task Modal -->
-                                  <div class="modal fade" id="editTaskModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel-{{ $task->id }}" aria-hidden="true">
-                                      <div class="modal-dialog" role="document">
-                                          <div class="modal-content">
-                                              <div class="modal-header">
-                                                  <h5 class="modal-title" id="editTaskModalLabel-{{ $task->id }}">Edit Task</h5>
-                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                      <span aria-hidden="true">&times;</span>
-                                                  </button>
-                                              </div>
-                                              <div class="modal-body">
-                                                  <form action="{{ route('tasks.update', $task->id) }}" method="POST">
-                                                      @csrf
-                                                      @method('PUT')
-
-                                                      <div class="form-group">
-                                                          <label for="title">Title</label>
-                                                          <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" required>
-                                                      </div>
-
-                                                      <div class="form-group">
-                                                          <label for="description">Description</label>
-                                                          <textarea class="form-control" id="description" name="description" required>{{ $task->description }}</textarea>
-                                                      </div>
-
-                                                      <div class="form-group">
-                                                          <label for="start_date">Start Date</label>
-                                                          <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $task->start_date }}" required>
-                                                      </div>
-
-                                                      <div class="form-group">
-                                                          <label for="end_date">End Date</label>
-                                                          <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $task->end_date }}" required>
-                                                      </div>
-
-                                                      <button type="submit" class="btn btn-primary">Save Changes</button>
-                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                  </form>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-
-                              <!-- Delete Button -->
-                              <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;  ">
-                                  @csrf
-                                  @method('DELETE')
-                                  <button type="submit" class="btn btn-danger btn-sm" title="Delete"  >
-                                      <i class="fa fa-trash"></i>
-                                  </button>
-                              </form>
-                          </td>
-                      </tr>
             @empty
                 <tr>
-                    <td colspan="4">No tasks available.</td>
+                    <td colspan="6">No tasks available.</td>
                 </tr>
             @endforelse
         </tbody>
     </table>
 @endif
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusFilter = document.getElementById('statusFilter');
+    const tasksTable = document.getElementById('tasksTable');
+
+    function filterTasks() {
+        const selectedStatus = statusFilter.value.toLowerCase();
+        const rows = tasksTable.getElementsByTagName('tr');
+
+        for (let row of rows) {
+            const rowStatus = row.getAttribute('data-status')?.toLowerCase();
+            if (rowStatus && (selectedStatus === 'all' || rowStatus === selectedStatus)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
+
+    statusFilter.addEventListener('change', filterTasks);
+
+    // Initialize filter
+    filterTasks();
+});
+</script>
+
 
          
                                   </div>
@@ -231,7 +263,7 @@
                     <th>start_date</th>
                     <th>end_date</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <!-- <th>Actions</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -256,62 +288,7 @@
                         <td>
 
                         <ul>
-                       <!-- Edit Button -->
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editTaskModal-{{ $task->id }}" title="Edit">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-
-                                  <!-- Edit Task Modal -->
-                                  <div class="modal fade" id="editTaskModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="editTaskModalLabel-{{ $task->id }}" aria-hidden="true">
-                                      <div class="modal-dialog" role="document">
-                                          <div class="modal-content">
-                                              <div class="modal-header">
-                                                  <h5 class="modal-title" id="editTaskModalLabel-{{ $task->id }}">Edit Task</h5>
-                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                      <span aria-hidden="true">&times;</span>
-                                                  </button>
-                                              </div>
-                                              <div class="modal-body">
-                                                  <form action="{{ route('tasks.update', $task->id) }}" method="POST">
-                                                      @csrf
-                                                      @method('PUT')
-
-                                                      <div class="form-group">
-                                                          <label for="title">Title</label>
-                                                          <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" required>
-                                                      </div>
-
-                                                      <div class="form-group">
-                                                          <label for="description">Description</label>
-                                                          <textarea class="form-control" id="description" name="description" required>{{ $task->description }}</textarea>
-                                                      </div>
-
-                                                      <div class="form-group">
-                                                          <label for="start_date">Start Date</label>
-                                                          <input type="date" class="form-control" id="start_date" name="start_date" value="{{ $task->start_date }}" required>
-                                                      </div>
-
-                                                      <div class="form-group">
-                                                          <label for="end_date">End Date</label>
-                                                          <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $task->end_date }}" required>
-                                                      </div>
-
-                                                      <button type="submit" class="btn btn-primary">Save Changes</button>
-                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                  </form>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-
-                              <!-- Delete Button -->
-                              <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;  ">
-                                  @csrf
-                                  @method('DELETE')
-                                  <button type="submit" class="btn btn-danger btn-sm" title="Delete"  >
-                                      <i class="fa fa-trash"></i>
-                                  </button>
-                              </form>
+                       
                           </td>
                       </tr>
             @empty
@@ -400,24 +377,28 @@
               <div class="d-flex date-details">
                 <div class="d-inline-block me-2">
                   <label for="start_date">Start Date</label>
-                  <input class="form-control" type="date" id="start_date" name="start_date" required>
+                  <input class="form-control" type="date" id="start_date" name="start_date" required min="{{ \Illuminate\Support\Carbon::today()->toDateString() }}" />
                 </div>
                 <div class="d-inline-block">
                   <label for="end_date">End Date</label>
-                  <input class="form-control" type="date" id="end_date" name="end_date" required>
+                  <input class="form-control" type="date" id="end_date" name="end_date" required min="{{ \Illuminate\Support\Carbon::today()->toDateString() }}" />
                 </div>
               </div>
             </div>
 
             <div class="mb-3 mt-0 col-md-6">
-                        <select class="form-select" name="user_ids[]" multiple>
+    <div style="max-height: 100px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+        @foreach($user as $item)
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="user_ids[]" value="{{ $item->id }}" id="user_{{ $item->id }}">
+                <label class="form-check-label" for="user_{{ $item->id }}">
+                    {{ $item->name }}
+                </label>
+            </div>
+        @endforeach
+    </div>
+</div>
 
-                          @foreach($user as $item)
-                            <option value="{{$item->id}}">{{$item->name}}</option>
-                          @endforeach
-
-                          </select>
-                        </div>
 
             <!-- Task Description -->
             <div class="mb-3 col-md-12 my-0">
@@ -439,4 +420,5 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
-   </div> @endsection
+<div class="form-group"></div>
+   @endsection
