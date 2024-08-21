@@ -7,7 +7,9 @@ use App\Models\User_tasks;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Mail\TaskAssigned;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class TaskController extends Controller
 {
@@ -49,6 +51,22 @@ class TaskController extends Controller
                     'updated_at' => now(),
                 ]);
             }
+        }
+
+         // Retrieve the user
+         $user = User::find($user_id);
+
+         // Debug the task ID and user's email
+        //  dd([
+        //      'task_id' => $task->id,
+        //      'user_id' => $user_id,
+        //      'user_email' => $user ? $user->email : 'User not found'
+        //  ]);
+
+          // Ensure the user exists before trying to send an email
+          if ($user) {
+            // Send an email to the assigned user
+            Mail::to($user->email)->send(new TaskAssigned($task, $user));
         }
     
         // Redirect to the dashboard with a success message
