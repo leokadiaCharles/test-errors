@@ -177,15 +177,7 @@
                       <h6 class="lan-1">General</h6>
                     </div>
                   </li>
-                  <li class="sidebar-list"><i class="fa fa-thumb-tack"></i><a class="sidebar-link sidebar-title" href="#">
-                      <svg class="stroke-icon">
-                        <use href="https://admin.pixelstrap.net/crocs/assets/svg/icon-sprite.svg#stroke-home"></use>
-                      </svg>
-                      <svg class="fill-icon">
-                        <use href="https://admin.pixelstrap.net/crocs/assets/svg/icon-sprite.svg#fill-home"></use>
-                      </svg><span class="lan-3">Dashboard          </span></a>
-            </li>
-           
+                 
                  
                   
                   

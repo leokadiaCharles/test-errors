@@ -385,13 +385,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
               </div>
             </div>
-
             <div class="mb-3 mt-0 col-md-6">
+
+
     <div style="max-height: 100px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+   
+
         @foreach($user as $item)
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="user_ids[]" value="{{ $item->id }}" id="user_{{ $item->id }}">
-                <label class="form-check-label" for="user_{{ $item->id }}">
+                <label  class="form-check-label" for="user_{{ $item->id }}">
                     {{ $item->name }}
                 </label>
             </div>

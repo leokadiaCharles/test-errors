@@ -29,20 +29,25 @@ class TaskController extends Controller
 
 
 
-    public function store(Request $request)
-    {
-        // Create a new task
-        $task = Task::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
-            'user_id' => auth()->id(),
-        ]);
-    
-        // Assign the task to multiple users if user_ids are provided
-        if ($request->has('user_ids')) {
-            foreach ($request->input('user_ids') as $user_id) {
+public function store(Request $request)
+{
+    // Create a new task
+    $task = Task::create([
+        'title' => $request->input('title'),
+        'description' => $request->input('description'),
+        'start_date' => $request->input('start_date'),
+        'end_date' => $request->input('end_date'),
+        'user_id' => auth()->id(),
+    ]);
+
+    $assignedUsers = $request->input('user_ids', []);
+
+    if (!empty($assignedUsers)) {
+        foreach ($assignedUsers as $user_id) {
+            // Ensure $user_id is valid
+            $user = User::find($user_id);
+
+            if ($user) {
                 \DB::table('user_tasks')->insert([
                     'task_id' => $task->id,
                     'user_id' => $user_id,
@@ -50,28 +55,27 @@ class TaskController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
+
+                // Send an email to the assigned user
+                Mail::to($user->email)->send(new TaskAssigned($task, $user));
+            } else {
+                // Handle the case when the user is not found
+                $errorMessage = 'User with ID ' . $user_id . ' not found.';
+                // Optionally log this error or set a session message
+                // Log::error($errorMessage);
             }
         }
-
-         // Retrieve the user
-         $user = User::find($user_id);
-
-         // Debug the task ID and user's email
-        //  dd([
-        //      'task_id' => $task->id,
-        //      'user_id' => $user_id,
-        //      'user_email' => $user ? $user->email : 'User not found'
-        //  ]);
-
-          // Ensure the user exists before trying to send an email
-          if ($user) {
-            // Send an email to the assigned user
-            Mail::to($user->email)->send(new TaskAssigned($task, $user));
-        }
-    
-        // Redirect to the dashboard with a success message
-        return redirect()->route('dashboard')->with('success', 'Task created successfully!');
+    } else {
+        // Handle the case when no users are assigned
+        $errorMessage = 'No users assigned to this task.';
+        // Optionally log this error or set a session message
+        // Log::info($errorMessage);
     }
+
+    // Redirect to the dashboard with a success message or error message
+    return redirect()->route('dashboard')->with('success', 'Task created successfully!');
+}
+
     
 
     public function getUserTasks()
